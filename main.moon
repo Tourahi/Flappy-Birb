@@ -30,7 +30,7 @@ with love
   .load = () ->
     B!
     Graphics.setDefaultFilter 'nearest', 'nearest'
-    Window.setTitle 'Flappy Berb'
+    Window.setTitle 'Flappy Birb'
     Push\setupScreen VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
       WINDOW_WIDTH, WINDOW_HEIGHT, windowOptions
     B\watch "backgroundScroll",-> backgroundScroll
