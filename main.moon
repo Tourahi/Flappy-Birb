@@ -8,8 +8,11 @@ export VIRTUAL_HEIGHT = 288
 
 import floor from math
 
-Graphics = love.graphics
-Window = love.window
+export Graphics = love.graphics
+export Window = love.window
+
+Bird = assert require 'Bird'
+bird = Bird!
 background = Graphics.newImage 'background.png'
 backgroundScroll = 0
 ground = Graphics.newImage 'ground.png'
@@ -52,6 +55,7 @@ with love
     Push\start!
     Graphics.draw background,-backgroundScroll,0
     Graphics.draw ground,-groundScroll,VIRTUAL_HEIGHT - 16
+    bird\draw!
     Push\finish!
     B\draw!
 
