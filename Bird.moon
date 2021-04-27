@@ -13,6 +13,7 @@ class Bird
   update: (dt) =>
     @dy += GRAVITY * dt
     @y += @dy
-
+    if Keyboard.wasPressed 'space'
+      @dy = -5
   draw: () =>
     Graphics.draw @image, @x, @y

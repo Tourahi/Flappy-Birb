@@ -10,6 +10,8 @@ import floor from math
 
 export Graphics = love.graphics
 export Window = love.window
+export Keyboard = love.keyboard
+Keyboard.keysPressed = {}
 
 Bird = assert require 'Bird'
 bird = Bird!
@@ -47,10 +49,18 @@ with love
     backgroundScroll =  (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     bird\update dt
+    Keyboard.keysPressed = {}
 
   .keypressed = (key) ->
+    Keyboard.keysPressed[key] = true
     if key == 'escape'
       love.event.quit!
+
+  .keyboard.wasPressed = (key) ->
+    if Keyboard.keysPressed[key]
+      return true
+    else
+      return false
 
   .draw = () ->
     Push\start!
