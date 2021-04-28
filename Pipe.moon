@@ -17,5 +17,5 @@ class Pipe
 
 
   draw: () =>
-    Graphics.draw PIPE_IMAGE, @x, @y,0 , 1,
+    Graphics.draw PIPE_IMAGE, @x, (@oriantation == 'top'and  @y + PIPE_HEIGHT or @y),0 , 1,
 			(@oriantation == 'top' and -1 or 1)

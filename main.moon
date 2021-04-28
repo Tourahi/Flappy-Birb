@@ -40,6 +40,7 @@ BACKGROUND_SCROLL_SPEED = 30
 GROUND_SCROLL_SPEED = 60
 
 BACKGROUND_LOOPING_POINT = 413
+PAUSE = false
 
 windowOptions = {
   vsync: true,
@@ -62,23 +63,27 @@ with love
 
   .update = (dt) ->
     B\update dt
-    spawnTimer += dt
-    if spawnTimer > 2
-      y = max(-PIPE_HEIGHT + 10, min(lastY + random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
-      lastY = y
-      insert pipePaires, PipePair y
-      spawnTimer = 0
+    if PAUSE == false
+      spawnTimer += dt
+      if spawnTimer > 2
+        y = max(-PIPE_HEIGHT + 10, min(lastY + random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+        lastY = y
+        insert pipePaires, PipePair y
+        spawnTimer = 0
 
-    for _, pair in pairs pipePaires
-      pair\update dt
+      for _, pair in pairs pipePaires
+        pair\update dt
+        for l,pipe in pairs pair.pipes
+          if bird\collides pipe
+            PAUSE = true
 
-    for _, pair in pairs pipePaires
-      if pair.remove
-        remove pipePaires, _
+      for _, pair in pairs pipePaires
+        if pair.remove
+          remove pipePaires, _
 
-    backgroundScroll =  (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
-    bird\update dt
+      backgroundScroll =  (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+      groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+      bird\update dt
     Keyboard.keysPressed = {}
 
   .keypressed = (key) ->

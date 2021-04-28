@@ -6,7 +6,7 @@ class PipePair
     @x = VIRTUAL_WIDTH + 32
     @y = y
     @pipes = {
-      ['upper']: Pipe('top', @y + PIPE_HEIGHT),
+      ['upper']: Pipe('top',@y ),
       ['lower']: Pipe('bottom', @y + PIPE_HEIGHT + GAP_HEIGHT)
     }
     @remove  = false

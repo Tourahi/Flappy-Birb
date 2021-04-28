@@ -15,5 +15,12 @@ class Bird
     @y += @dy
     if Keyboard.wasPressed 'space'
       @dy = -5
+
+  collides: (pipe) =>
+    if (@x+2) + (@width-4) >= pipe.x and @x+2 <= pipe.x + PIPE_WIDTH
+      if (@y+2) + (@height-4) >= pipe.y and @y+2 <= pipe.y + PIPE_HEIGHT
+        return true
+    return false
   draw: () =>
     Graphics.draw @image, @x, @y
+    Graphics.rectangle 'line', @x+2, @y+2, @width - 4, @height-4
