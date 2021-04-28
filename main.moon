@@ -9,6 +9,9 @@ export VIRTUAL_HEIGHT = 288
 import floor from math
 import insert from table
 import remove from table
+import max from math
+import min from math
+import random from math
 
 export Graphics = love.graphics
 export Window = love.window
@@ -18,8 +21,14 @@ Keyboard.keysPressed = {}
 Bird = assert require 'Bird'
 bird = Bird!
 
+
 Pipe = assert require 'Pipe'
-pipes = {}
+
+PipePair = assert require 'PipePair'
+
+pipePaires = {}
+lastY = -PIPE_HEIGHT + math.random(80) + 20
+
 spawnTimer = 0
 
 background = Graphics.newImage 'background.png'
@@ -55,13 +64,17 @@ with love
     B\update dt
     spawnTimer += dt
     if spawnTimer > 2
-      insert pipes, Pipe!
+      y = max(-PIPE_HEIGHT + 10, min(lastY + random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+      lastY = y
+      insert pipePaires, PipePair y
       spawnTimer = 0
-    for k, pipe in pairs pipes
-      pipe\update dt
-      if pipe.x < -pipe.width
-        remove pipes, k
 
+    for _, pair in pairs pipePaires
+      pair\update dt
+
+    for _, pair in pairs pipePaires
+      if pair.remove
+        remove pipePaires, _
 
     backgroundScroll =  (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
@@ -82,8 +95,10 @@ with love
   .draw = () ->
     Push\start!
     Graphics.draw background,-backgroundScroll,0
-    for _, pipe in pairs pipes
-      pipe\draw!
+
+    for _, pair in pairs pipePaires
+      pair\draw!
+
     Graphics.draw ground,-groundScroll,VIRTUAL_HEIGHT - 16
     bird\draw!
     Push\finish!
