@@ -1,4 +1,4 @@
-
+math.randomseed os.time!
 export Push = assert require 'libs.push'
 export B = assert require 'libs.Binocles'
 export WINDOW_WIDTH = 1280
@@ -7,6 +7,8 @@ export VIRTUAL_WIDTH = 512
 export VIRTUAL_HEIGHT = 288
 
 import floor from math
+import insert from table
+import remove from table
 
 export Graphics = love.graphics
 export Window = love.window
@@ -15,6 +17,11 @@ Keyboard.keysPressed = {}
 
 Bird = assert require 'Bird'
 bird = Bird!
+
+Pipe = assert require 'Pipe'
+pipes = {}
+spawnTimer = 0
+
 background = Graphics.newImage 'background.png'
 backgroundScroll = 0
 ground = Graphics.newImage 'ground.png'
@@ -46,6 +53,16 @@ with love
 
   .update = (dt) ->
     B\update dt
+    spawnTimer += dt
+    if spawnTimer > 2
+      insert pipes, Pipe!
+      spawnTimer = 0
+    for k, pipe in pairs pipes
+      pipe\update dt
+      if pipe.x < -pipe.width
+        remove pipes, k
+
+
     backgroundScroll =  (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     bird\update dt
@@ -65,6 +82,8 @@ with love
   .draw = () ->
     Push\start!
     Graphics.draw background,-backgroundScroll,0
+    for _, pipe in pairs pipes
+      pipe\draw!
     Graphics.draw ground,-groundScroll,VIRTUAL_HEIGHT - 16
     bird\draw!
     Push\finish!
